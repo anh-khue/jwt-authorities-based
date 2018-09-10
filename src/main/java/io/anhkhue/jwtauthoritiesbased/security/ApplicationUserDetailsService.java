@@ -4,6 +4,7 @@ import io.anhkhue.jwtauthoritiesbased.model.Account;
 import io.anhkhue.jwtauthoritiesbased.repository.AccountRepository;
 import io.anhkhue.jwtauthoritiesbased.repository.AuthorityRepository;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,8 +34,9 @@ public class ApplicationUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
 
-        Collection<GrantedAuthority> authorities = Collections.singletonList((GrantedAuthority) ()
-                -> authorityRepository.findById(account.getId()).getAuthorityName());
+        Collection<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(authorityRepository.findById(account.getAuthorityId())
+                                                              .getAuthorityName()));
 
         return new User(account.getUsername(),
                         account.getPassword(),

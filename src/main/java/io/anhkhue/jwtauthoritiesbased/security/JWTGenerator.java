@@ -53,6 +53,7 @@ public class JWTGenerator extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication authResult)
             throws IOException, ServletException {
+        authResult.getAuthorities().forEach(authority -> System.out.println(authority.getAuthority()));
         String token = JWT.create()
                           .withSubject(((User) authResult.getPrincipal()).getUsername())
                           .withClaim(AUTHORITIES_KEY, authResult.getAuthorities()

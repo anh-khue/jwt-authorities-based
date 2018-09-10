@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -56,7 +57,7 @@ public class JWTVerifier extends BasicAuthenticationFilter {
                 Collection<GrantedAuthority> authorities = Arrays.stream(getDecodedJWT(token).getClaim(AUTHORITIES_KEY)
                                                                                              .asString()
                                                                                              .split(","))
-                                                                 .map(authority -> (GrantedAuthority) () -> authority)
+                                                                 .map(SimpleGrantedAuthority::new)
                                                                  .collect(Collectors.toList());
 
                 return new UsernamePasswordAuthenticationToken(username,
